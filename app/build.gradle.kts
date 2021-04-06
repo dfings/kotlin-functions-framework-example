@@ -34,7 +34,7 @@ val functionTarget = "io.github.dfings.example.App"
 val splitter = "\\s+".toRegex()
 
 task<Exec>("pack") {
-    dependsOn("test", "clean", "shadowJar")
+    dependsOn("test", "shadowJar")
     commandLine = """pack build $appName
         --path build/libs
         --env GOOGLE_FUNCTION_TARGET=$functionTarget
@@ -42,16 +42,11 @@ task<Exec>("pack") {
 }
 
 task<JavaExec>("run") {
-    dependsOn("shadowJar")
-    inputs.files("app.jar")
-
     main = "com.google.cloud.functions.invoker.runner.Invoker"
     args("--target", functionTarget)
 
-    classpath(invoker)
-    doFirst {
-        args("--classpath", files(configurations.runtimeClasspath, sourceSets["main"].output).asPath)
-    }
+    val shadowJarTask = tasks.get("shadowJar") as ShadowJar
+    classpath(invoker, shadowJarTask.archiveFile)
 }
 
 task<Exec>("runDocker") {
