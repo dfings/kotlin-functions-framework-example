@@ -1,8 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.4.20"
-    id("com.github.johnrengelman.shadow") version "4.0.4"
+    kotlin("jvm") version "1.4.32"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 repositories {
